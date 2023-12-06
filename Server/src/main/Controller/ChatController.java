@@ -1,6 +1,6 @@
 package main.Controller;
 
-import main.config.ResponseBody;
+import main.Service.ChatService;
 
 //path /chat
 public class ChatController implements DefaultController {
@@ -9,23 +9,13 @@ public class ChatController implements DefaultController {
     public static ChatController getInstance() {
         return instance;
     }
+    private ChatService chatService = ChatService.getInstance();
     @Override
-    public ResponseBody callMethod(String method, String body) {
-//        switch (method) {
-//            case "GET": loadChat(body);
-//            case "POST": sendChat(body);
-//            default: break;
-//        }
-        return null;
-    }
-
-    // GET
-    public void loadChat() {
-
-    }
-
-    // POST
-    public void sendChat() {
-
+    public void callService(String method, String body) {
+        switch (method) {
+            case "GET": chatService.loadChat(body); break;
+            case "POST": chatService.sendChat(body); break;
+            default: chatService.methodError();
+        }
     }
 }

@@ -1,9 +1,11 @@
+package main;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Main implements Runnable {
+public class Client implements Runnable {
     // 서버 포트 지정
     private static final int PORT = 8000;
     static Socket csocket;
@@ -16,7 +18,7 @@ public class Main implements Runnable {
     }
 
     @Override
-    public void run() { // thread 로 실행 해야만 작동 하는 메서드?
+    public void run() {
         String msg;
         while (true) {
             try {
@@ -24,14 +26,14 @@ public class Main implements Runnable {
             } catch (IOException e) {
                 break;
             }
-            if (msg.equals("Success:Reg_ID")) {
-                reg_stop();
-                System.out.println("ID 등록이 성공했습니다");
-            } else if (msg != null) {
-                System.out.println("서버로부터 온 메시지: " + msg);
-            } else {
+            if (msg == null) {
                 System.out.println("서버 연결이 종료되었습니다.");
                 break;
+            } else if (msg.equals("Success:Reg_ID")) {
+                reg_stop();
+                System.out.println("ID 등록이 성공했습니다");
+            } else {
+                System.out.println("서버로부터 온 메시지: " + msg);
             }
         }
     }
@@ -43,7 +45,7 @@ public class Main implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
-        Main t = new Main();
+        Client t = new Client();
         final Scanner sc = new Scanner(System.in);
 
         // 소켓 생성
@@ -63,14 +65,16 @@ public class Main implements Runnable {
             System.out.println("Enter:");
             myID = sc.nextLine();
 //            msg = "ID:" + myID + "\n" + "body " + myID;
-            msg = "POST /user Chat/1.0\t" +
+            msg = "POST /user\t" +
                     // body
                     "username:testUsername," +
                     "password:testPassword," +
                     "nickname:testNickname";
+            System.out.println(msg);
             out.println(msg);
             out.flush();
-            Thread.sleep(200);
+            System.out.println("전송");
+            Thread.sleep(1000);
                 /* 컴퓨터 성능에 따라 서버로부터 답이 늦게 오면 키보드 입력문으로 바로
                    실행이 넘어갈 수 있어서 서버로부터 답을 기다리기 위해 잠시 기다린 후
                    조건문을 검사합니다.
@@ -100,7 +104,7 @@ public class Main implements Runnable {
                 out.println(msg);
                 out.flush();
             } else {  //정해진 사용법이 아닌 것으로 입력시
-                 showUsage();
+                showUsage();
             }
         }
         out.close();

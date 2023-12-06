@@ -5,6 +5,18 @@ public class Chat {
     private String message;
     private Long userId;
 
+    public Chat(String body) {
+        String[] args = body.split(",");
+        for (String arg : args) {
+            switch (arg.split(":")[0]) {
+                case "roomId": roomId = Long.parseLong(arg.split(":")[1]);
+                case "userId": userId = Long.parseLong(arg.split(":")[1]);
+                case "message": message = arg.split(":")[1];
+                default: ;
+            }
+        }
+    }
+
     public Chat(Long roomId, String message, Long userId) {
         this.roomId = roomId;
         this.message = message;
@@ -21,6 +33,5 @@ public class Chat {
         return userId;
     }
 
-    private Chat() {
-    }
+    private Chat() { }
 }

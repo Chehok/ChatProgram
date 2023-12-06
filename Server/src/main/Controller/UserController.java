@@ -1,8 +1,6 @@
 package main.Controller;
 
 import main.Service.UserService;
-import main.config.ResponseBody;
-import static main.config.ResponseStatus.*;
 
 // path /user
 public class UserController implements DefaultController {
@@ -11,14 +9,14 @@ public class UserController implements DefaultController {
     public static UserController getInstance() {
         return instance;
     }
-    UserService userService;
+    UserService userService = UserService.getInstance();
     @Override
-    public ResponseBody callMethod(String method, String body) {
+    public void callService(String method, String body) {
         switch (method) {
-            case "GET": return userService.login(body);
-            case "POST": return userService.signUp(body);
-            case "PATCH": return userService.logout(body);
-            default: return new ResponseBody(CLIENT_ERROR); // 잘못된 요청 이라는 메시지 반환
+            case "GET": userService.login(body); break;
+            case "POST": userService.signUp(body); break;
+            case "PATCH": userService.logout(body); break;
+            default: userService.methodError();
         }
     }
 }

@@ -10,6 +10,11 @@ import static main.config.Constant.*;
 import static main.config.ResponseStatus.*;
 
 public class UserDao {
+    private static UserDao instance = new UserDao();
+    private UserDao() {}
+    public static UserDao getInstance() {
+        return instance;
+    }
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -44,7 +49,10 @@ public class UserDao {
             throw new CustomException(DB_ERROR);
         } catch (ClassNotFoundException e) {
             throw new CustomException(DB_ERROR);
-        } finally {
+        } catch (CustomException e){
+            throw e;
+        }
+        finally {
             try {
                 if (connection != null && !connection.isClosed()) connection.close();
                 if (statement != null && !statement.isClosed()) statement.close();

@@ -1,7 +1,9 @@
 package main.Domain.User;
 
-public class UserDto {
-    private long userId = 1;
+import main.Domain.Result;
+
+public class UserDto implements Result {
+    private Long userId;
     private String nickname;
 
     public UserDto(long userId, String nickname) {
@@ -9,7 +11,12 @@ public class UserDto {
         this.nickname = nickname;
     }
 
-    public long getUserId() { return userId; }
+    public Long getUserId() { return userId; }
 
     public String getNickname() { return nickname; }
+
+    @Override
+    public String getResult() {
+        return String.format("userId:%l,nickname:%s", userId, nickname);
+    }
 }

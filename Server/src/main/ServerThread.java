@@ -4,7 +4,7 @@ import main.Controller.ChatController;
 import main.Controller.DefaultController;
 import main.Controller.RoomController;
 import main.Controller.UserController;
-import main.config.ResponseBody;
+import main.config.Response;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,11 +17,10 @@ import java.nio.charset.StandardCharsets;
 public class ServerThread implements Runnable {
     Socket client;//Socket 클래스 타입의 변수 child 선언
     BufferedReader in; // BufferReader 클래스 타입의 변수 ois 선언
-    PrintWriter out; // PrintWriter 클래스 타입의 변수 oos 선언
-//    public HashMap<Long, PrintWriter> onlineUser; // 접속자 관리
+    public static PrintWriter out; // PrintWriter 클래스 타입의 변수 oos 선언
     InetAddress ip; // InetAddress 클래스 타입의 변수 ip 선언
     DefaultController controller;
-    ResponseBody responseBody;
+    Response responseBody;
 
     public ServerThread(Socket socket) throws IOException {
         client = socket;
@@ -46,7 +45,7 @@ public class ServerThread implements Runnable {
             while ((msg = in.readLine()) != null) { // BufferedReader 에 값이 들어올 때 까지 대기함.
                 request = msg.split("\t");
                 /**
-                 * request[0] (header) == POST /user Chat/1.0
+                 * request[0] (header) == POST /user
                  * request[1] (body) == username:username1,password:password1,nickname:nickname1
                  */
                 switch (request[0].split(" ")[1]) { // path
@@ -59,10 +58,15 @@ public class ServerThread implements Runnable {
                     case "/chat":
                         controller = ChatController.getInstance();
                         break;
-                    default:
-                        ; // 잘못된 코드
+                    default: ; // 잘못된 코드
                 }
-                responseBody = controller.callMethod(request[0].split(" ")[0], request[2]);
+
+//                try {
+                    controller.callService(request[0].split(" ")[0], request[1]);
+//                } catch (CustomException e) {
+//                    out.println(new Response<>(e.getStatus()));
+//                    out.flush();
+//                }
 
 //                final String[] tokens = msg.split("\n");
 //                code = tokens[0];

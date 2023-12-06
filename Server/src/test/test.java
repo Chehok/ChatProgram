@@ -1,5 +1,6 @@
 package test;
 
+import main.Controller.UserController;
 import main.config.CustomException;
 
 public class test {
@@ -12,5 +13,11 @@ public class test {
 
 //        RoomDao roomDao = new RoomDao();
 //        roomDao.createRoom("이현우의채팅방", 3L);
+        UserController userController = UserController.getInstance();
+        userController.callService("POST",
+                // body
+                "username:testUsername," +
+                "password:testPassword," +
+                "nickname:testNickname");
     }
 }

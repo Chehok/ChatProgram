@@ -10,11 +10,16 @@ import static main.config.Constant.*;
 import static main.config.ResponseStatus.*;
 
 public class RoomDao {
+    private static RoomDao instance = new RoomDao();
+    private RoomDao() {}
+    public static RoomDao getInstance() {
+        return instance;
+    }
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
-    public List<Room> loadRoom(Long userId) throws CustomException {
+    public List<Room> loadRoom(Room room) throws CustomException {
         String query;
         List<Room> list = null;
         try {
@@ -27,7 +32,7 @@ public class RoomDao {
                     "on room.roomId = ur.roomId " +
                     "where ur.userId = ?";
             statement = connection.prepareStatement(query);
-            statement.setLong(1, userId);
+            statement.setLong(1, room.getUserId());
             resultSet = statement.executeQuery();
 
             while(resultSet.next()) {
@@ -49,7 +54,7 @@ public class RoomDao {
         }
     }
 
-    public void createRoom(String roomName, Long userId) throws CustomException {
+    public void createRoom(Room room) throws CustomException {
         String query;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -58,7 +63,7 @@ public class RoomDao {
             // 채팅방 생성
             query = "insert into chatrooms (roomName) values (?)";
             statement = connection.prepareStatement(query);
-            statement.setString(1, roomName);
+            statement.setString(1, room.getRoomName());
 
             int count = statement.executeUpdate();
             if (count == 0) {
@@ -78,7 +83,7 @@ public class RoomDao {
             query = "insert into roomusers (roomId, userId) values (?, ?)";
             statement = connection.prepareStatement(query);
             statement.setLong(1, roomId);
-            statement.setLong(2, userId);
+            statement.setLong(2, room.getUserId());
 
             count = statement.executeUpdate();
             if (count == 0) {
