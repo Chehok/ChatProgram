@@ -1,4 +1,4 @@
-package main.Domain.Room;
+package main.src.Domain.Room;
 
 public class RoomUser {
     private long roomId;

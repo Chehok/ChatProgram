@@ -1,6 +1,6 @@
-package main.Controller;
+package main.src.Controller;
 
-import main.Service.UserService;
+import main.src.Service.UserService;
 
 // path /user
 public class UserController implements DefaultController {
@@ -11,8 +11,8 @@ public class UserController implements DefaultController {
     }
     UserService userService = UserService.getInstance();
     @Override
-    public void callService(String method, String body) {
-        switch (method) {
+    public void callService(String header, String body) {
+        switch (header) {
             case "GET": userService.login(body); break;
             case "POST": userService.signUp(body); break;
             case "PATCH": userService.logout(body); break;

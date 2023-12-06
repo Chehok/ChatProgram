@@ -1,7 +1,7 @@
-package main.Dao;
+package main.src.Dao;
 
-import main.Domain.Chat.Chat;
-import main.Domain.Chat.ChatDto;
+import main.src.Domain.Chat.Chat;
+import main.src.Domain.Chat.ChatDto;
 import main.config.CustomException;
 
 import java.sql.*;

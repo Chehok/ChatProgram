@@ -1,6 +1,6 @@
 package test;
 
-import main.Controller.UserController;
+import main.src.Controller.UserController;
 import main.config.CustomException;
 
 public class test {

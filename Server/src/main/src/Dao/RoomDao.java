@@ -1,6 +1,6 @@
-package main.Dao;
+package main.src.Dao;
 
-import main.Domain.Room.Room;
+import main.src.Domain.Room.Room;
 import main.config.CustomException;
 
 import java.sql.*;

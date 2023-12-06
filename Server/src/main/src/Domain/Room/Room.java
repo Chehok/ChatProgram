@@ -1,4 +1,4 @@
-package main.Domain.Room;
+package main.src.Domain.Room;
 
 public class Room {
     private Long roomId;
@@ -10,9 +10,9 @@ public class Room {
         String[] args = body.split(",");
         for (String arg : args) {
             switch (arg.split(":")[0]) {
-                case "roomId": roomId = Long.parseLong(arg.split(":")[1]);
-                case "userId": userId = Long.parseLong(arg.split(":")[1]);
-                case "roomName": roomName = arg.split(":")[1];
+                case "roomId": roomId = Long.parseLong(arg.split(":")[1]); break;
+                case "userId": userId = Long.parseLong(arg.split(":")[1]); break;
+                case "roomName": roomName = arg.split(":")[1]; break;
                 default: ;
             }
         }

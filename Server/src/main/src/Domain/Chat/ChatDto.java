@@ -1,6 +1,6 @@
-package main.Domain.Chat;
+package main.src.Domain.Chat;
 
-import main.Domain.Result;
+import main.src.Domain.Result;
 
 public class ChatDto implements Result {
     private Long userId;

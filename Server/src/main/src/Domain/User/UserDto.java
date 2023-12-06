@@ -1,6 +1,6 @@
-package main.Domain.User;
+package main.src.Domain.User;
 
-import main.Domain.Result;
+import main.src.Domain.Result;
 
 public class UserDto implements Result {
     private Long userId;

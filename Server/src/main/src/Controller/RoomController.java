@@ -1,6 +1,6 @@
-package main.Controller;
+package main.src.Controller;
 
-import main.Service.RoomService;
+import main.src.Service.RoomService;
 
 // path /room
 public class RoomController implements DefaultController {
@@ -12,8 +12,8 @@ public class RoomController implements DefaultController {
     RoomService roomService = RoomService.getInstance();
 
     @Override
-    public void callService(String method, String body) {
-        switch (method) {
+    public void callService(String header, String body) {
+        switch (header) {
             case "GET": roomService.loadRoom(body); break;
             case "POST": roomService.createRoom(body); break;
 //            case "PATCH": roomService.inviteRoom(body);

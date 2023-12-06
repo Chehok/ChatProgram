@@ -1,14 +1,14 @@
-package main.Service;
+package main.src.Service;
 
-import main.Dao.UserDao;
-import main.Domain.User.User;
-import main.Domain.User.UserDto;
+import main.src.Dao.UserDao;
+import main.src.Domain.User.User;
+import main.src.Domain.User.UserDto;
 import main.config.CustomException;
-import main.config.Response;
+import main.config.CustomResponse;
 import main.config.ResponseStatus;
 
-import static main.MainServer.onlineUser;
-import static main.ServerThread.out;
+import static main.src.MainServer.onlineUser;
+import static main.src.ServerThread.out;
 
 public class UserService {
     private static UserService instance = new UserService();
@@ -19,52 +19,52 @@ public class UserService {
     UserDao userDao = UserDao.getInstance();
 
     public void signUp(String body) {
-        Response response = null;
+        CustomResponse customResponse = null;
         try {
             userDao.signUp(new User(body));
-            response = new Response<>("회원 가입 성공");
+            customResponse = new CustomResponse<>("회원 가입 성공");
         } catch (CustomException e) {
-            response = new Response<>(e.getStatus());
+            customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(response.getResponse());
+            out.println(customResponse.getResponse());
             out.flush();
         }
     }
 
     public void login(String body) {
-        Response response = null;
+        CustomResponse customResponse = null;
         UserDto userDto;
         try {
             userDto = userDao.login(new User(body));
-            response = new Response(userDto);
+            customResponse = new CustomResponse(userDto);
 
             synchronized (onlineUser) {
                 onlineUser.put(userDto.getUserId(), out);
             }
         } catch (CustomException e) {
-            response = new Response<>(e.getStatus());
+            customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(response.getResponse());
+            out.println(customResponse.getResponse());
             out.flush();
         }
     }
 
     public void logout(String body) {
-        Response response;
+        CustomResponse customResponse;
         Long userId = new User(body).getUserId();
         onlineUser.remove(userId);
 
         if (userId == null) {
-            response = new Response(new CustomException(ResponseStatus.BODY_ERROR));
+            customResponse = new CustomResponse(new CustomException(ResponseStatus.BODY_ERROR));
         } else {
-            response = new Response("로그아웃 되었습니다!");
+            customResponse = new CustomResponse("로그아웃 되었습니다!");
         }
-        out.println(response.getResponse());
+        out.println(customResponse.getResponse());
         out.flush();
     }
 
     public void methodError() {
-        out.println(new Response<>(new CustomException(ResponseStatus.METHOD_ERROR)));
+        out.println(new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR)));
         out.flush();
     }
 }

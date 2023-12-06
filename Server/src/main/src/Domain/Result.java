@@ -1,4 +1,4 @@
-package main.Domain;
+package main.src.Domain;
 
 public interface Result {
     public String getResult();

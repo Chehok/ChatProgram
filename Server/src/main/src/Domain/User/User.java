@@ -1,4 +1,4 @@
-package main.Domain.User;
+package main.src.Domain.User;
 
 public class User {
     private Long userId;
@@ -11,14 +11,15 @@ public class User {
         String[] args = body.split(",");
         for (String arg : args) {
             switch (arg.split(":")[0]) {
-                case "userId": userId = Long.parseLong(arg.split(":")[1]);
-                case "username": username = arg.split(":")[1];
-                case "password": password = arg.split(":")[1];
-                case "nickname": nickname = arg.split(":")[1];
+                case "userId": userId = Long.parseLong(arg.split(":")[1]); break;
+                case "username": username = arg.split(":")[1]; break;
+                case "password": password = arg.split(":")[1]; break;
+                case "nickname": nickname = arg.split(":")[1]; break;
                 default: ;
             }
         }
     }
+
     public Long getUserId() {
         return userId;
     }

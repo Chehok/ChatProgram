@@ -1,12 +1,12 @@
-package main.Service;
+package main.src.Service;
 
-import main.Dao.RoomDao;
-import main.Domain.Room.Room;
+import main.src.Dao.RoomDao;
+import main.src.Domain.Room.Room;
 import main.config.CustomException;
-import main.config.Response;
+import main.config.CustomResponse;
 import main.config.ResponseStatus;
 
-import static main.ServerThread.out;
+import static main.src.ServerThread.out;
 
 public class RoomService {
     private static RoomService instance = new RoomService();
@@ -18,26 +18,26 @@ public class RoomService {
 
     public void loadRoom (String body) {
 //        return null;
-        Response response = null;
+        CustomResponse customResponse = null;
         try{
-            response = new Response<>(roomDao.loadRoom(new Room(body)));
+            customResponse = new CustomResponse<>(roomDao.loadRoom(new Room(body)));
         } catch (CustomException e) {
-            response = new Response<>(e.getStatus());
+            customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(response.getResponse());
+            out.println(customResponse.getResponse());
             out.flush();
         }
     }
 
     public void createRoom(String body) {
-        Response response = null;
+        CustomResponse customResponse = null;
         try{
             roomDao.createRoom(new Room(body));
-            response = new Response<>("방 생성 성공");
+            customResponse = new CustomResponse<>("방 생성 성공");
         } catch (CustomException e) {
-            response = new Response<>(e.getStatus());
+            customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(response.getResponse());
+            out.println(customResponse.getResponse());
             out.flush();
         }
     }
@@ -51,7 +51,7 @@ public class RoomService {
     }
 
     public void methodError() {
-        out.println(new Response<>(new CustomException(ResponseStatus.METHOD_ERROR)));
+        out.println(new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR)));
         out.flush();
     }
 }

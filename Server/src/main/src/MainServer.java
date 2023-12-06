@@ -1,4 +1,4 @@
-package main;
+package main.src;
 
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -31,7 +31,7 @@ public class MainServer implements Runnable {
                     serverThread = new ServerThread(socket);
                     thread = new Thread(serverThread);
                     thread.setDaemon(true); // 데몬스레드는 일반스레드의 보조역할을 하므로, 일반스레드가 종료되면 데몬스레드도 종료 됨.
-                    // 다시 말해서 serverThread 는 main.MainServer 에 종속 됨.
+                    // 다시 말해서 serverThread 는 main.src.MainServer 에 종속 됨.
                     thread.start(); //쓰레드 시작
                 }
             }

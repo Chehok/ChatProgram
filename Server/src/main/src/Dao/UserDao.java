@@ -1,7 +1,7 @@
-package main.Dao;
+package main.src.Dao;
 
-import main.Domain.User.User;
-import main.Domain.User.UserDto;
+import main.src.Domain.User.User;
+import main.src.Domain.User.UserDto;
 import main.config.CustomException;
 
 import java.sql.*;

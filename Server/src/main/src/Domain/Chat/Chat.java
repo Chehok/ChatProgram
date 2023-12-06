@@ -1,4 +1,4 @@
-package main.Domain.Chat;
+package main.src.Domain.Chat;
 
 public class Chat {
     private Long roomId;
@@ -9,9 +9,9 @@ public class Chat {
         String[] args = body.split(",");
         for (String arg : args) {
             switch (arg.split(":")[0]) {
-                case "roomId": roomId = Long.parseLong(arg.split(":")[1]);
-                case "userId": userId = Long.parseLong(arg.split(":")[1]);
-                case "message": message = arg.split(":")[1];
+                case "roomId": roomId = Long.parseLong(arg.split(":")[1]); break;
+                case "userId": userId = Long.parseLong(arg.split(":")[1]); break;
+                case "message": message = arg.split(":")[1]; break;
                 default: ;
             }
         }

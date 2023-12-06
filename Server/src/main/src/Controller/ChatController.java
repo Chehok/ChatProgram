@@ -1,6 +1,6 @@
-package main.Controller;
+package main.src.Controller;
 
-import main.Service.ChatService;
+import main.src.Service.ChatService;
 
 //path /chat
 public class ChatController implements DefaultController {
@@ -11,8 +11,8 @@ public class ChatController implements DefaultController {
     }
     private ChatService chatService = ChatService.getInstance();
     @Override
-    public void callService(String method, String body) {
-        switch (method) {
+    public void callService(String header, String body) {
+        switch (header) {
             case "GET": chatService.loadChat(body); break;
             case "POST": chatService.sendChat(body); break;
             default: chatService.methodError();

@@ -1,23 +1,23 @@
 package main.config;
 
-import main.Domain.Result;
+import main.src.Domain.Result;
 
 import java.util.List;
 
-public class Response<T> {
+public class CustomResponse<T> {
     private String statusCode;
     private String isSuccess;
     private T result; // List<Chat> 일 때는 값을 어떻게 String으로 변환하는 가
 
     // 요청 성공
-    public Response(T result) {
+    public CustomResponse(T result) {
         this.statusCode = "200";
         this.isSuccess = "SUCCESS";
         this.result = result;
     }
 
     // 요청 실패
-    public Response(ResponseStatus status) {
+    public CustomResponse(ResponseStatus status) {
         this.statusCode = status.getStatusCode(); // 201 / 202 / 404
         this.isSuccess = "FAIL"; // FAIL
         this.result = (T) status.getMessage();
@@ -31,8 +31,10 @@ public class Response<T> {
         } else if (results instanceof List) {
             for (Result result : (List<Result>) results) {
                 response += String.format("%s/", result.getResult());
-                response.trim();
             }
+            // 문자열의 마지막 인덱스에 해당하는 부분을 잘라줌.
+            // 결과: 마지막에 들어간 구분자 / 를 제거해줌.
+            response = response.substring(0, response.length() - 1);
         } else {
             response += String.format("%s", ( (Result) results).getResult());
         }

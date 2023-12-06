@@ -1,10 +1,6 @@
-package main;
+package main.src;
 
-import main.Controller.ChatController;
-import main.Controller.DefaultController;
-import main.Controller.RoomController;
-import main.Controller.UserController;
-import main.config.Response;
+import main.src.Controller.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,11 +16,12 @@ public class ServerThread implements Runnable {
     public static PrintWriter out; // PrintWriter 클래스 타입의 변수 oos 선언
     InetAddress ip; // InetAddress 클래스 타입의 변수 ip 선언
     DefaultController controller;
-    Response responseBody;
+
+    ProxyController proxyController;
 
     public ServerThread(Socket socket) throws IOException {
         client = socket;
-//        onlineUser = main.MainServer.onlineUser;
+        proxyController = new ProxyController();
 
         // 클라이언트 소켓의 input / output stream 과 ip를 등록 하고 있음.
         try {
@@ -48,21 +45,23 @@ public class ServerThread implements Runnable {
                  * request[0] (header) == POST /user
                  * request[1] (body) == username:username1,password:password1,nickname:nickname1
                  */
-                switch (request[0].split(" ")[1]) { // path
-                    case "/user":
-                        controller = UserController.getInstance();
-                        break;
-                    case "/room":
-                        controller = RoomController.getInstance();
-                        break;
-                    case "/chat":
-                        controller = ChatController.getInstance();
-                        break;
-                    default: ; // 잘못된 코드
-                }
+                proxyController.callService(request[0], request[1]);
+
+//                switch (request[0].split(" ")[1]) { // path
+//                    case "/user":
+//                        controller = UserController.getInstance();
+//                        break;
+//                    case "/room":
+//                        controller = RoomController.getInstance();
+//                        break;
+//                    case "/chat":
+//                        controller = ChatController.getInstance();
+//                        break;
+//                    default: ; // 잘못된 코드
+//                }
+//                controller.callService(request[0].split(" ")[0], request[1]);
 
 //                try {
-                    controller.callService(request[0].split(" ")[0], request[1]);
 //                } catch (CustomException e) {
 //                    out.println(new Response<>(e.getStatus()));
 //                    out.flush();
