@@ -38,3 +38,6 @@ out/
 
 ### MAC ###
 .DS_Store
+
+### config ###
+Server/src/main/config/Constant.java
