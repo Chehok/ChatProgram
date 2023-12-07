@@ -3,8 +3,8 @@ package main.src.Controller;
 public class ProxyController implements DefaultController {
     DefaultController controller;
     /**
-     * request[0] (header) == POST /user
-     * request[1] (body) == username:username1,password:password1,nickname:nickname1
+     * request[0] (header) == "POST /user"
+     * request[1] (body) == "username:username1,password:password1,nickname:nickname1"
      */
     @Override
     public void callService(String header, String body) {

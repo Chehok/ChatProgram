@@ -2,7 +2,6 @@ package main.src.Controller;
 
 import main.src.Service.RoomService;
 
-// path /room
 public class RoomController implements DefaultController {
     private static RoomController instance = new RoomController();
     private RoomController() {}

@@ -1,4 +1,4 @@
-package main.src.Dao;
+package main.src.DAO;
 
 import main.src.Domain.User.User;
 import main.src.Domain.User.UserDto;
@@ -9,10 +9,10 @@ import java.sql.*;
 import static main.config.Constant.*;
 import static main.config.ResponseStatus.*;
 
-public class UserDao extends DefaultDao{
-    private static UserDao instance = new UserDao();
-    private UserDao() {}
-    public static UserDao getInstance() {
+public class UserDAO extends DefaultDAO {
+    private static UserDAO instance = new UserDAO();
+    private UserDAO() {}
+    public static UserDAO getInstance() {
         return instance;
     }
     Connection connection = null;

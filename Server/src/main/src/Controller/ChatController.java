@@ -2,7 +2,6 @@ package main.src.Controller;
 
 import main.src.Service.ChatService;
 
-//path /chat
 public class ChatController implements DefaultController {
     private static ChatController instance = new ChatController();
     private ChatController() {}

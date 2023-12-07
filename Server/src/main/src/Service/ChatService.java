@@ -1,6 +1,6 @@
 package main.src.Service;
 
-import main.src.Dao.ChatDao;
+import main.src.DAO.ChatDAO;
 import main.src.Domain.Chat.Chat;
 import main.src.Domain.Chat.ChatDto;
 import main.config.CustomException;
@@ -19,7 +19,7 @@ public class ChatService {
     public static ChatService getInstance() {
         return instance;
     }
-    ChatDao chatDao = ChatDao.getInstance();
+    ChatDAO chatDao = ChatDAO.getInstance();
 
     public void loadChat(String body) {
         CustomResponse customResponse = null;
@@ -39,7 +39,6 @@ public class ChatService {
         CustomResponse customResponse;
         PrintWriter sender;
         try {
-//            customResponse = new CustomResponse<>(chatDao.sendChat(new Chat(body)));
             chat = chatDao.sendChat(new Chat(body));
             synchronized (onlineUser) {
                 for (ChatDto c : chat) {

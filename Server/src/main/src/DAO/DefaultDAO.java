@@ -1,10 +1,10 @@
-package main.src.Dao;
+package main.src.DAO;
 
 import main.config.CustomException;
 
 import static main.config.ResponseStatus.DB_ERROR;
 
-public class DefaultDao {
+public class DefaultDAO {
     public void init() throws CustomException {
         try {
             Class.forName("com.mysql.jdbc.Driver");

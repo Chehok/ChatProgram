@@ -1,6 +1,6 @@
 package main.src.Service;
 
-import main.src.Dao.UserDao;
+import main.src.DAO.UserDAO;
 import main.src.Domain.User.User;
 import main.src.Domain.User.UserDto;
 import main.config.CustomException;
@@ -16,7 +16,7 @@ public class UserService {
     public static UserService getInstance() {
         return instance;
     }
-    UserDao userDao = UserDao.getInstance();
+    UserDAO userDao = UserDAO.getInstance();
 
     public void signUp(String body) {
         CustomResponse customResponse = null;

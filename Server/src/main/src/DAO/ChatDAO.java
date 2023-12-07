@@ -1,4 +1,4 @@
-package main.src.Dao;
+package main.src.DAO;
 
 import main.src.Domain.Chat.Chat;
 import main.src.Domain.Chat.ChatDto;
@@ -12,10 +12,10 @@ import static main.config.Constant.*;
 import static main.config.ResponseStatus.DB_ERROR;
 import static main.config.ResponseStatus.ROOMS_NULL;
 
-public class ChatDao extends DefaultDao {
-    private static ChatDao instance = new ChatDao();
-    private ChatDao() {}
-    public static ChatDao getInstance() {
+public class ChatDAO extends DefaultDAO {
+    private static ChatDAO instance = new ChatDAO();
+    private ChatDAO() {}
+    public static ChatDAO getInstance() {
         return instance;
     }
     Connection connection = null;

@@ -2,7 +2,6 @@ package main.src.Controller;
 
 import main.src.Service.UserService;
 
-// path /user
 public class UserController implements DefaultController {
     private static UserController instance = new UserController();
     private UserController() {}

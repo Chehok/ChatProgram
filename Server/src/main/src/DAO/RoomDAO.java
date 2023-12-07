@@ -1,4 +1,4 @@
-package main.src.Dao;
+package main.src.DAO;
 
 import main.src.Domain.Room.Room;
 import main.config.CustomException;
@@ -10,13 +10,13 @@ import java.util.List;
 import static main.config.Constant.*;
 import static main.config.ResponseStatus.*;
 
-public class RoomDao extends DefaultDao {
-    private static RoomDao instance = new RoomDao();
+public class RoomDAO extends DefaultDAO {
+    private static RoomDAO instance = new RoomDAO();
 
-    private RoomDao() {
+    private RoomDAO() {
     }
 
-    public static RoomDao getInstance() {
+    public static RoomDAO getInstance() {
         return instance;
     }
 

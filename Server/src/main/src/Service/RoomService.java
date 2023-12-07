@@ -1,6 +1,6 @@
 package main.src.Service;
 
-import main.src.Dao.RoomDao;
+import main.src.DAO.RoomDAO;
 import main.src.Domain.Room.Room;
 import main.config.CustomException;
 import main.config.CustomResponse;
@@ -19,7 +19,7 @@ public class RoomService {
         return instance;
     }
 
-    RoomDao roomDao = RoomDao.getInstance();
+    RoomDAO roomDao = RoomDAO.getInstance();
 
     public void loadRoom(String body) {
         CustomResponse customResponse = null;

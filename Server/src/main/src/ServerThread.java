@@ -3,7 +3,7 @@ package main.src;
 import main.config.CustomException;
 import main.src.Controller.DefaultController;
 import main.src.Controller.ProxyController;
-import main.src.Dao.DefaultDao;
+import main.src.DAO.DefaultDAO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class ServerThread implements Runnable {
 
         // 클라이언트 소켓의 input / output stream 과 ip를 등록 하고 있음.
         try {
-            new DefaultDao().init();
+            new DefaultDAO().init();
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(client.getOutputStream(), false, StandardCharsets.UTF_8);
             ip = client.getInetAddress();
