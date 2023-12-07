@@ -5,12 +5,14 @@ import main.src.Domain.Chat.ChatDto;
 import main.config.CustomException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static main.config.Constant.*;
 import static main.config.ResponseStatus.DB_ERROR;
+import static main.config.ResponseStatus.ROOMS_NULL;
 
-public class ChatDao {
+public class ChatDao extends DefaultDao {
     private static ChatDao instance = new ChatDao();
     private ChatDao() {}
     public static ChatDao getInstance() {
@@ -22,9 +24,8 @@ public class ChatDao {
 
     public List<ChatDto> loadChat(Chat chat) throws CustomException {
         String query;
-        List<ChatDto> list = null;
+        List<ChatDto> list = new ArrayList<>();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             query = "select cr.roomname, users.nickname, chat.message " +
@@ -37,18 +38,18 @@ public class ChatDao {
             statement.setLong(1, chat.getRoomId());
             resultSet = statement.executeQuery();
 
-            while(resultSet.next()) {
+            if (!resultSet.next()) throw new CustomException(ROOMS_NULL);
+
+            do {
                 list.add(
                         new ChatDto(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3))
                 );
-            }
+            } while(resultSet.next());
 
             return list;
         } catch (SQLException e) { // MySQL 에러
-            throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {
@@ -61,9 +62,8 @@ public class ChatDao {
     }
     public List<ChatDto> sendChat(Chat chat) throws CustomException {
         String query;
-        List<ChatDto> list = null;
+        List<ChatDto> list = new ArrayList<>();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             query = "insert into Chats (roomId, message, userId) values (?, ?, ?)";
@@ -80,10 +80,11 @@ public class ChatDao {
             query = "select ur.userId, cr.roomname, users.nickname " +
                     "from UserRooms as ur " +
                     "join ChatRooms as cr on cr.roomId = ur.roomId " +
-                    "join Users as users on ur.userId = users.userId " +
-                    "where ur.roomId = ?";
+                    "join Users as users " +
+                    "where ur.roomId = ? and users.userId = ?";
             statement = connection.prepareStatement(query);
             statement.setLong(1, chat.getRoomId());
+            statement.setLong(2, chat.getUserId());
             resultSet = statement.executeQuery();
 
             while(resultSet.next()) {
@@ -99,8 +100,6 @@ public class ChatDao {
 
             return list;
         } catch (SQLException e) { // MySQL 에러
-            throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {

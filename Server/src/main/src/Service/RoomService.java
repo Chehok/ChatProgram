@@ -6,21 +6,30 @@ import main.config.CustomException;
 import main.config.CustomResponse;
 import main.config.ResponseStatus;
 
+import static main.config.ResponseStatus.BODY_ERROR;
 import static main.src.ServerThread.out;
 
 public class RoomService {
     private static RoomService instance = new RoomService();
-    private RoomService() {}
+
+    private RoomService() {
+    }
+
     public static RoomService getInstance() {
         return instance;
     }
+
     RoomDao roomDao = RoomDao.getInstance();
 
-    public void loadRoom (String body) {
-//        return null;
+    public void loadRoom(String body) {
         CustomResponse customResponse = null;
-        try{
-            customResponse = new CustomResponse<>(roomDao.loadRoom(new Room(body)));
+        Room room = new Room(body);
+
+        try {
+            if (room.getUserId() == null) {
+                throw new CustomException(BODY_ERROR);
+            }
+            customResponse = new CustomResponse<>(roomDao.loadRoom(room));
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
@@ -31,8 +40,12 @@ public class RoomService {
 
     public void createRoom(String body) {
         CustomResponse customResponse = null;
-        try{
-            roomDao.createRoom(new Room(body));
+        Room room = new Room(body);
+        try {
+            if (room.getUserId() == null || room.getRoomName() == null) {
+                throw new CustomException(BODY_ERROR);
+            }
+            roomDao.createRoom(room);
             customResponse = new CustomResponse<>("방 생성 성공");
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());

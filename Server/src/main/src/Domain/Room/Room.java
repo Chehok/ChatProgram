@@ -1,6 +1,8 @@
 package main.src.Domain.Room;
 
-public class Room {
+import main.src.Domain.Result;
+
+public class Room implements Result {
     private Long roomId;
     private Long userId;
     private String roomName;
@@ -16,6 +18,11 @@ public class Room {
                 default: ;
             }
         }
+    }
+
+    @Override
+    public String getResult() {
+        return String.format("roomId:%s,roomName:%s", roomId, roomName);
     }
 
     // 채팅방 조회

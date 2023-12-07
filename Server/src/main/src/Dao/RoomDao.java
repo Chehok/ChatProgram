@@ -4,26 +4,30 @@ import main.src.Domain.Room.Room;
 import main.config.CustomException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static main.config.Constant.*;
 import static main.config.ResponseStatus.*;
 
-public class RoomDao {
+public class RoomDao extends DefaultDao {
     private static RoomDao instance = new RoomDao();
-    private RoomDao() {}
+
+    private RoomDao() {
+    }
+
     public static RoomDao getInstance() {
         return instance;
     }
+
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
     public List<Room> loadRoom(Room room) throws CustomException {
         String query;
-        List<Room> list = null;
+        List<Room> list = new ArrayList<>();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             query = "select room.roomId, room.roomName " +
@@ -35,15 +39,18 @@ public class RoomDao {
             statement.setLong(1, room.getUserId());
             resultSet = statement.executeQuery();
 
-            while(resultSet.next()) {
+            if (!resultSet.next()) throw new CustomException(ROOMS_NULL);
+
+            do {
                 list.add(new Room(resultSet.getLong(1), resultSet.getString(2)));
-            }
+            } while (resultSet.next());
 
             return list;
         } catch (SQLException e) { // MySQL 에러
             throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
-            throw new CustomException(DB_ERROR);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw e;
         } finally {
             try {
                 if (connection != null && !connection.isClosed()) connection.close();
@@ -57,7 +64,6 @@ public class RoomDao {
     public void createRoom(Room room) throws CustomException {
         String query;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             // 채팅방 생성
@@ -74,13 +80,13 @@ public class RoomDao {
             query = "SELECT LAST_INSERT_ID()";
             statement = connection.prepareStatement(query);
             resultSet = statement.executeQuery();
-            if(!resultSet.next()) {
+            if (!resultSet.next()) {
                 throw new CustomException(DB_ERROR);
             }
             Long roomId = resultSet.getLong(1);
 
             // 채팅방 : 생성자 매핑
-            query = "insert into roomusers (roomId, userId) values (?, ?)";
+            query = "insert into userrooms (roomId, userId) values (?, ?)";
             statement = connection.prepareStatement(query);
             statement.setLong(1, roomId);
             statement.setLong(2, room.getUserId());
@@ -90,8 +96,6 @@ public class RoomDao {
                 throw new CustomException(DB_ERROR);
             }
         } catch (SQLException e) { // MySQL 에러
-            throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {
@@ -105,13 +109,12 @@ public class RoomDao {
 
     public void inviteRoom(Long roomId, List<String> invitedUsers) throws CustomException {
         String query;
-        List<Long> userIds = null;
+        List<Long> userIds = new ArrayList<>();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             query = "select userId from users where username = ?";
-            for (String username: invitedUsers) {
+            for (String username : invitedUsers) {
                 statement = connection.prepareStatement(query);
                 statement.setString(1, username);
 
@@ -125,7 +128,7 @@ public class RoomDao {
             // transaction 예정
             query = "insert into RoomUsers (roomId, userId) values (?, ?)";
 
-            for (Long userId: userIds) {
+            for (Long userId : userIds) {
                 statement = connection.prepareStatement(query);
                 statement.setLong(1, roomId);
                 statement.setLong(2, userId);
@@ -137,8 +140,6 @@ public class RoomDao {
             }
 
         } catch (SQLException e) { // MySQL 에러
-            throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {

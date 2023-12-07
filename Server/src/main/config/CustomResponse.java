@@ -35,8 +35,8 @@ public class CustomResponse<T> {
             // 문자열의 마지막 인덱스에 해당하는 부분을 잘라줌.
             // 결과: 마지막에 들어간 구분자 / 를 제거해줌.
             response = response.substring(0, response.length() - 1);
-        } else {
-            response += String.format("%s", ( (Result) results).getResult());
+        } else if (results instanceof Result){
+            response += String.format("%s", ((Result) results).getResult());
         }
         return response;
     }

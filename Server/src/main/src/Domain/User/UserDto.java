@@ -17,6 +17,6 @@ public class UserDto implements Result {
 
     @Override
     public String getResult() {
-        return String.format("userId:%l,nickname:%s", userId, nickname);
+        return String.format("userId:%s,nickname:%s", userId, nickname);
     }
 }

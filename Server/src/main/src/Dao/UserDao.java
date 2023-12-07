@@ -9,7 +9,7 @@ import java.sql.*;
 import static main.config.Constant.*;
 import static main.config.ResponseStatus.*;
 
-public class UserDao {
+public class UserDao extends DefaultDao{
     private static UserDao instance = new UserDao();
     private UserDao() {}
     public static UserDao getInstance() {
@@ -18,10 +18,10 @@ public class UserDao {
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
+
     public void signUp(User body) throws CustomException {
         String query;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             // 아이디 중복확인
@@ -47,8 +47,6 @@ public class UserDao {
             }
         } catch (SQLException e) { // MySQL 에러
             throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
-            throw new CustomException(DB_ERROR);
         } catch (CustomException e){
             throw e;
         }
@@ -64,7 +62,6 @@ public class UserDao {
 
     public UserDto login(User body) throws CustomException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
             String query = "select userId, nickname from users where username=? AND password=?";
@@ -80,10 +77,6 @@ public class UserDao {
             return new UserDto(resultSet.getLong(1), resultSet.getString(2));
         } catch (SQLException e) { // MySQL 에러
             throw new CustomException(DB_ERROR);
-        } catch (ClassNotFoundException e) {
-            throw new CustomException(DB_ERROR);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         } finally {
             try {
                 if (connection != null && !connection.isClosed()) connection.close();

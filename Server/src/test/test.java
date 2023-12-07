@@ -1,7 +1,7 @@
 package test;
 
-import main.src.Controller.UserController;
 import main.config.CustomException;
+import main.src.Controller.ProxyController;
 
 public class test {
     public static void main(String[] args) throws CustomException {
@@ -13,11 +13,13 @@ public class test {
 
 //        RoomDao roomDao = new RoomDao();
 //        roomDao.createRoom("이현우의채팅방", 3L);
-        UserController userController = UserController.getInstance();
-        userController.callService("POST",
-                // body
-                "username:testUsername," +
-                "password:testPassword," +
-                "nickname:testNickname");
+//        UserController userController = UserController.getInstance();
+//        userController.callService("POST",
+//                // body
+//                "username:testUsername," +
+//                "password:testPassword," +
+//                "nickname:testNickname");
+
+        new ProxyController().callService("GET /user", "username:l000127,password:dlgusdn!00");
     }
 }

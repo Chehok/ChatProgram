@@ -35,15 +35,19 @@ public class ChatService {
     }
 
     public void sendChat(String body) {
-        CustomResponse<List<ChatDto>> customResponse;
+        List<ChatDto> chat;
+        CustomResponse customResponse;
         PrintWriter sender;
         try {
-            customResponse = new CustomResponse<>(chatDao.sendChat(new Chat(body)));
+//            customResponse = new CustomResponse<>(chatDao.sendChat(new Chat(body)));
+            chat = chatDao.sendChat(new Chat(body));
             synchronized (onlineUser) {
-                for (ChatDto c : customResponse.getResult()) {
-                    sender = onlineUser.get(c.getUserId());
-                    sender.println(customResponse.getResponse());
-                    sender.flush();
+                for (ChatDto c : chat) {
+                    if((sender = onlineUser.get(c.getUserId())) != null) {
+                        customResponse = new CustomResponse<>(c);
+                        sender.println(customResponse.getResponse());
+                        sender.flush();
+                    }
                 }
             }
         } catch (CustomException e) {
