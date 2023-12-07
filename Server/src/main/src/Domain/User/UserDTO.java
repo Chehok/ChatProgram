@@ -2,11 +2,11 @@ package main.src.Domain.User;
 
 import main.src.Domain.Result;
 
-public class UserDto implements Result {
+public class UserDTO implements Result {
     private Long userId;
     private String nickname;
 
-    public UserDto(long userId, String nickname) {
+    public UserDTO(long userId, String nickname) {
         this.userId = userId;
         this.nickname = nickname;
     }

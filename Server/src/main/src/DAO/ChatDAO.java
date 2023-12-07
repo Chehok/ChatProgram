@@ -1,7 +1,7 @@
 package main.src.DAO;
 
 import main.src.Domain.Chat.Chat;
-import main.src.Domain.Chat.ChatDto;
+import main.src.Domain.Chat.ChatDTO;
 import main.config.CustomException;
 
 import java.sql.*;
@@ -22,9 +22,9 @@ public class ChatDAO extends DefaultDAO {
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
-    public List<ChatDto> loadChat(Chat chat) throws CustomException {
+    public List<ChatDTO> loadChat(Chat chat) throws CustomException {
         String query;
-        List<ChatDto> list = new ArrayList<>();
+        List<ChatDTO> list = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
@@ -42,7 +42,7 @@ public class ChatDAO extends DefaultDAO {
 
             do {
                 list.add(
-                        new ChatDto(resultSet.getString(1),
+                        new ChatDTO(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3))
                 );
@@ -60,9 +60,9 @@ public class ChatDAO extends DefaultDAO {
             }
         }
     }
-    public List<ChatDto> sendChat(Chat chat) throws CustomException {
+    public List<ChatDTO> sendChat(Chat chat) throws CustomException {
         String query;
-        List<ChatDto> list = new ArrayList<>();
+        List<ChatDTO> list = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
@@ -89,7 +89,7 @@ public class ChatDAO extends DefaultDAO {
 
             while(resultSet.next()) {
                 list.add(
-                        new ChatDto(
+                        new ChatDTO(
                                 resultSet.getLong(1),
                                 resultSet.getString(2),
                                 resultSet.getString(3),

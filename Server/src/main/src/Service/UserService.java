@@ -2,7 +2,7 @@ package main.src.Service;
 
 import main.src.DAO.UserDAO;
 import main.src.Domain.User.User;
-import main.src.Domain.User.UserDto;
+import main.src.Domain.User.UserDTO;
 import main.config.CustomException;
 import main.config.CustomResponse;
 import main.config.ResponseStatus;
@@ -33,7 +33,7 @@ public class UserService {
 
     public void login(String body) {
         CustomResponse customResponse = null;
-        UserDto userDto;
+        UserDTO userDto;
         try {
             userDto = userDao.login(new User(body));
             customResponse = new CustomResponse(userDto);

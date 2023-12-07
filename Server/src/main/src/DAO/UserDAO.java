@@ -1,7 +1,7 @@
 package main.src.DAO;
 
 import main.src.Domain.User.User;
-import main.src.Domain.User.UserDto;
+import main.src.Domain.User.UserDTO;
 import main.config.CustomException;
 
 import java.sql.*;
@@ -60,7 +60,7 @@ public class UserDAO extends DefaultDAO {
         }
     }
 
-    public UserDto login(User body) throws CustomException {
+    public UserDTO login(User body) throws CustomException {
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
@@ -74,7 +74,7 @@ public class UserDAO extends DefaultDAO {
                 throw new CustomException(USERS_NULL);
             }
 
-            return new UserDto(resultSet.getLong(1), resultSet.getString(2));
+            return new UserDTO(resultSet.getLong(1), resultSet.getString(2));
         } catch (SQLException e) { // MySQL 에러
             throw new CustomException(DB_ERROR);
         } finally {

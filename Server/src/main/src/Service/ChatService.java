@@ -2,7 +2,7 @@ package main.src.Service;
 
 import main.src.DAO.ChatDAO;
 import main.src.Domain.Chat.Chat;
-import main.src.Domain.Chat.ChatDto;
+import main.src.Domain.Chat.ChatDTO;
 import main.config.CustomException;
 import main.config.CustomResponse;
 import main.config.ResponseStatus;
@@ -35,13 +35,13 @@ public class ChatService {
     }
 
     public void sendChat(String body) {
-        List<ChatDto> chat;
+        List<ChatDTO> chat;
         CustomResponse customResponse;
         PrintWriter sender;
         try {
             chat = chatDao.sendChat(new Chat(body));
             synchronized (onlineUser) {
-                for (ChatDto c : chat) {
+                for (ChatDTO c : chat) {
                     if((sender = onlineUser.get(c.getUserId())) != null) {
                         customResponse = new CustomResponse<>(c);
                         sender.println(customResponse.getResponse());
