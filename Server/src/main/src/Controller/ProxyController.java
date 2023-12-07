@@ -1,6 +1,5 @@
 package main.src.Controller;
 
-// Proxy Pattern
 public class ProxyController implements DefaultController {
     DefaultController controller;
     /**
@@ -19,7 +18,7 @@ public class ProxyController implements DefaultController {
             case "/chat":
                 controller = ChatController.getInstance();
                 break;
-            default: ; // 잘못된 코드
+            default: ; // 잘못된 요청
         }
         controller.callService(header.split(" ")[0], body);
     }

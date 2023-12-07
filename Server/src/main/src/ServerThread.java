@@ -50,69 +50,6 @@ public class ServerThread implements Runnable {
                  * request[1] (body) == username:username1,password:password1,nickname:nickname1
                  */
                 proxyController.callService(request[0], request[1]);
-
-//                switch (request[0].split(" ")[1]) { // path
-//                    case "/user":
-//                        controller = UserController.getInstance();
-//                        break;
-//                    case "/room":
-//                        controller = RoomController.getInstance();
-//                        break;
-//                    case "/chat":
-//                        controller = ChatController.getInstance();
-//                        break;
-//                    default: ; // 잘못된 코드
-//                }
-//                controller.callService(request[0].split(" ")[0], request[1]);
-
-//                try {
-//                } catch (CustomException e) {
-//                    out.println(new Response<>(e.getStatus()));
-//                    out.flush();
-//                }
-
-//                final String[] tokens = msg.split("\n");
-//                code = tokens[0];
-//                fromID = tokens[1];
-
-//                if ("QUIT".equals(code)) {
-//                    System.out.println(fromID + "종료합니다.");
-//                    synchronized (접속자) {
-//                        try {
-//                            접속자.remove(fromID);
-//                        } catch (Exception ignored) {
-//                        }
-//                    }
-//                    break;
-//                } else if ("ID".equals(code)) { //ID 등록
-//                    if (접속자.containsKey(fromID)) {
-//                        out.println("FAIL:Reg_ID");
-//                        out.flush();
-//                    } else {
-//                        synchronized (접속자) {
-//                            접속자.put(fromID, out);
-//                            out.println("Success:Reg_ID");
-//                            out.flush();
-//                        }
-//                    }
-//                } else if ("TO".equals(code)) {
-//                    String toID = tokens[2];
-//                    sendTo(toID, msg);
-//                } else {
-//                    broadcast(msg);
-//                }
-//            }
-//            } catch(Exception e){
-//                System.out.println(e.toString());
-//            } finally{
-//                try {
-//                    in.close();
-//                    out.close();
-//                    client.close();
-//                } catch (Exception e) {
-//                    System.out.println(e.toString());
-//                }
-//            }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -126,12 +63,4 @@ public class ServerThread implements Runnable {
             }
         }
     }
-//    private void sendTo(String toID, String message) throws IOException {
-//        PrintWriter out = onlineUser.get(toID);
-//
-//        if (out != null) {
-//            out.println(message);
-//            out.flush();
-//        }
-//    }
 }
