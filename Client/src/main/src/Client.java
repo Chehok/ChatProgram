@@ -110,12 +110,14 @@ public class Client implements Runnable {
     }
 
     private static void showUsage() {
-        System.out.println("기능을 선택 하십시오. \n" +
-                "1 - 채팅방 목록 보기 \n" +
-                "2 - 채팅방 생성 \n" +
-                "3 - 채팅방 채팅 내역 \n" +
-                "4 - 채팅 보내기 \n" +
-                "0 - 로그아웃");
+        System.out.println("""
+                기능을 선택 하십시오.
+                1 - 채팅방 목록 보기
+                2 - 채팅방 생성
+                3 - 채팅방 채팅 내역
+                4 - 채팅 보내기
+                0 - 로그아웃"""
+        );
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -146,10 +148,12 @@ public class Client implements Runnable {
                 String username;
                 String password;
                 String nickname;
-                System.out.println("기능을 선택 하십시오.\n" +
-                        "1 - 회원가입 \n" +
-                        "2 - 로그인 \n" +
-                        "0 - 종료");
+                System.out.println("""
+                        기능을 선택 하십시오.
+                        1 - 회원가입
+                        2 - 로그인
+                        0 - 종료"""
+                );
                 func = sc.nextLine();
 
                 if (func.equals("1")) {
@@ -161,7 +165,8 @@ public class Client implements Runnable {
                     nickname = sc.nextLine();
                     customRequest = new CustomRequest(
                             "POST", "/user",
-                            new SignUpDto(username, password, nickname)
+                            new SignUpDto(username, password, nickname
+                            )
                     );
                 } else if (func.equals("2")) {
                     System.out.println("아이디를 입력하세요");

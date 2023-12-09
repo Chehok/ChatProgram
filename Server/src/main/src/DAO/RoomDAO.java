@@ -30,11 +30,12 @@ public class RoomDAO extends DefaultDAO {
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
-            query = "select room.roomId, room.roomName " +
-                    "from ChatRooms as room " +
-                    "join UserRooms as ur " +
-                    "on room.roomId = ur.roomId " +
-                    "where ur.userId = ?";
+            query = """
+                    select room.roomId, room.roomName
+                    from ChatRooms as room
+                    join UserRooms as ur
+                    on room.roomId = ur.roomId
+                    where ur.userId = ?""";
             statement = connection.prepareStatement(query);
             statement.setLong(1, room.getUserId());
             resultSet = statement.executeQuery();
@@ -107,23 +108,23 @@ public class RoomDAO extends DefaultDAO {
         }
     }
 
-    public void inviteRoom(Long roomId, List<String> invitedUsers) throws CustomException {
+    public void inviteRoom(Long roomId, List<Long> invitedUsers) throws CustomException {
         String query;
         List<Long> userIds = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
-            query = "select userId from users where username = ?";
-            for (String username : invitedUsers) {
-                statement = connection.prepareStatement(query);
-                statement.setString(1, username);
-
-                resultSet = statement.executeQuery();
-                if (!resultSet.next()) {
-                    throw new CustomException(USERS_NULL);
-                }
-                userIds.add(resultSet.getLong(1));
-            }
+//            query = "select userId from users where username = ?";
+//            for (String username : invitedUsers) {
+//                statement = connection.prepareStatement(query);
+//                statement.setString(1, username);
+//
+//                resultSet = statement.executeQuery();
+//                if (!resultSet.next()) {
+//                    throw new CustomException(USERS_NULL);
+//                }
+//                userIds.add(resultSet.getLong(1));
+//            }
 
             // transaction 예정
             query = "insert into RoomUsers (roomId, userId) values (?, ?)";

@@ -28,12 +28,13 @@ public class ChatDAO extends DefaultDAO {
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
-            query = "select cr.roomname, users.nickname, chat.message " +
-                    "from UserRooms as ur " +
-                    "join Chats as chat on ur.roomId = chat.roomId and ur.userId = chat.userId " +
-                    "join Users as users on users.userId = chat.userId " +
-                    "join ChatRooms as cr on cr.roomId = ur.roomId " +
-                    "where ur.roomId = ?";
+            query = """
+                    select cr.roomname, users.nickname, chat.message
+                    from UserRooms as ur
+                    join Chats as chat on ur.roomId = chat.roomId and ur.userId = chat.userId
+                    join Users as users on users.userId = chat.userId
+                    join ChatRooms as cr on cr.roomId = ur.roomId
+                    where ur.roomId = ?""";
             statement = connection.prepareStatement(query);
             statement.setLong(1, chat.getRoomId());
             resultSet = statement.executeQuery();
@@ -77,11 +78,12 @@ public class ChatDAO extends DefaultDAO {
                 throw new CustomException(DB_ERROR);
             }
 
-            query = "select ur.userId, cr.roomname, users.nickname " +
-                    "from UserRooms as ur " +
-                    "join ChatRooms as cr on cr.roomId = ur.roomId " +
-                    "join Users as users " +
-                    "where ur.roomId = ? and users.userId = ?";
+            query = """
+                    select ur.userId, cr.roomname, users.nickname
+                    from UserRooms as ur
+                    join ChatRooms as cr on cr.roomId = ur.roomId
+                    join Users as users
+                    where ur.roomId = ? and users.userId = ?""";
             statement = connection.prepareStatement(query);
             statement.setLong(1, chat.getRoomId());
             statement.setLong(2, chat.getUserId());
