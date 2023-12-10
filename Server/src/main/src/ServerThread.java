@@ -51,7 +51,6 @@ public class ServerThread implements Runnable {
                 } catch (Exception ignore) {
 
                 }
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
