@@ -1,7 +1,8 @@
 package main.src.DAO;
 
-import main.src.Domain.Room.Room;
 import main.config.CustomException;
+import main.src.Domain.Room.Room;
+import main.src.Domain.Room.RoomDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,12 +31,11 @@ public class RoomDAO extends DefaultDAO {
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
-            query = """
-                    select room.roomId, room.roomName
-                    from ChatRooms as room
-                    join UserRooms as ur
-                    on room.roomId = ur.roomId
-                    where ur.userId = ?""";
+            query = "select room.roomId, room.roomName " +
+                    "from ChatRooms as room " +
+                    "join UserRooms as ur " +
+                    "on room.roomId = ur.roomId " +
+                    "where ur.userId = ?";
             statement = connection.prepareStatement(query);
             statement.setLong(1, room.getUserId());
             resultSet = statement.executeQuery();
@@ -108,38 +108,55 @@ public class RoomDAO extends DefaultDAO {
         }
     }
 
-    public void inviteRoom(Long roomId, List<Long> invitedUsers) throws CustomException {
+    public List<RoomDTO> inviteRoom(Room room) throws CustomException {
         String query;
-        List<Long> userIds = new ArrayList<>();
+        List<RoomDTO> list = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
+            query = "select * from UserRooms where roomId = ? and userId = ?";
 
-//            query = "select userId from users where username = ?";
-//            for (String username : invitedUsers) {
-//                statement = connection.prepareStatement(query);
-//                statement.setString(1, username);
-//
-//                resultSet = statement.executeQuery();
-//                if (!resultSet.next()) {
-//                    throw new CustomException(USERS_NULL);
-//                }
-//                userIds.add(resultSet.getLong(1));
-//            }
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, room.getRoomId());
+            statement.setLong(2, room.getUserId());
+
+            resultSet = statement.executeQuery();
+
+            if(resultSet.next()) throw new CustomException(ALREADY_INVITED);
 
             // transaction 예정
-            query = "insert into RoomUsers (roomId, userId) values (?, ?)";
+            query = "insert into UserRooms (roomId, userId) values (?, ?)";
 
-            for (Long userId : userIds) {
-                statement = connection.prepareStatement(query);
-                statement.setLong(1, roomId);
-                statement.setLong(2, userId);
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, room.getRoomId());
+            statement.setLong(2, room.getUserId());
 
-                int count = statement.executeUpdate();
-                if (count == 0) {
-                    throw new CustomException(DB_ERROR);
-                }
+            int count = statement.executeUpdate();
+            if (count == 0) {
+                throw new CustomException(DB_ERROR);
             }
 
+            query = "select cr.roomName, users.nickName, ur.userId " +
+                    "from UserRooms as ur " +
+                    "join ChatRooms as cr on cr.roomId = ur.roomId " +
+                    "join Users as users " +
+                    "where ur.roomId = ? and users.userId = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, room.getRoomId());
+            statement.setLong(2, room.getUserId());
+
+            resultSet = statement.executeQuery();
+
+            if(!resultSet.next()) throw new CustomException(DB_ERROR);
+            do {
+                list.add(new RoomDTO(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getLong(3))
+                );
+            } while (resultSet.next());
+
+            return list;
         } catch (SQLException e) { // MySQL 에러
             throw new CustomException(DB_ERROR);
         } finally {
@@ -152,7 +169,54 @@ public class RoomDAO extends DefaultDAO {
         }
     }
 
-    public void exitRoom() {
+    public List<RoomDTO> exitRoom(Room room) throws CustomException {
+        String query;
+        List<RoomDTO> list = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword);
 
+            query = "delete from UserRooms where roomId = ? and userId = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, room.getRoomId());
+            statement.setLong(2, room.getUserId());
+
+            int count = statement.executeUpdate();
+            if (count == 0) {
+                throw new CustomException(DB_ERROR);
+            }
+
+            // transaction 예정
+            query = "select cr.roomName, users.nickName, ur.userId " +
+                    "from UserRooms as ur " +
+                    "join ChatRooms as cr on cr.roomId = ur.roomId " +
+                    "join Users as users " +
+                    "where ur.roomId = ? and users.userId = ?";
+
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, room.getRoomId());
+            statement.setLong(2, room.getUserId());
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                list.add(new RoomDTO(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getLong(3))
+                );
+            }
+
+            return list;
+        } catch (SQLException e) { // MySQL 에러
+            throw new CustomException(DB_ERROR);
+        } finally {
+            try {
+                if (connection != null && !connection.isClosed()) connection.close();
+                if (statement != null && !statement.isClosed()) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
