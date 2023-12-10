@@ -45,7 +45,6 @@ public class ChatService {
                     if((sender = onlineUser.get(c.getUserId())) != null) {
                         customResponse = new CustomResponse<>(c);
                         sender.println(customResponse.getResponse());
-                        sender.flush();
                     }
                 }
             }

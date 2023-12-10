@@ -14,11 +14,11 @@ public class UserController implements DefaultController {
     UserService userService = UserService.getInstance();
     @Override
     public CustomResponse callService(String header, String body, PrintWriter out) {
-        return switch (header) {
-            case "GET" -> userService.login(body, out);
-            case "POST" -> userService.signUp(body);
-            case "PATCH" -> userService.logout(body);
-            default -> userService.methodError();
-        };
+        switch (header) {
+            case "GET": return userService.login(body, out);
+            case "POST": return userService.signUp(body);
+            case "PATCH": return userService.logout(body);
+            default: return userService.methodError();
+        }
     }
 }

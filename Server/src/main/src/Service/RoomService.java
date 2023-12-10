@@ -72,12 +72,11 @@ public class RoomService {
 
             synchronized (onlineUser) {
                 customResponse = new CustomResponse<>(
-                        String.format("\"%s\"에 \"%s\"님이 들어오셨습니다", roomDTO.get(1).getRoomName(), roomDTO.get(1).getNickname())
+                        String.format("\"%s\"에 \"%s\"님이 들어오셨습니다", roomDTO.get(0).getRoomName(), roomDTO.get(0).getNickname())
                 );
                 for (RoomDTO r : roomDTO) {
                     if ((sender = onlineUser.get(r.getUserId())) != null) {
                         sender.println(customResponse.getResponse());
-                        sender.flush();
                     }
                 }
             }
@@ -105,17 +104,15 @@ public class RoomService {
 
             synchronized (onlineUser) {
                 customResponse = new CustomResponse<>(
-                        String.format("\"%s\"에서 \"%s\"님이 나가셨습니다", roomDTO.get(1).getRoomName(), roomDTO.get(1).getNickname())
+                        String.format("\"%s\"에서 \"%s\"님이 나가셨습니다", roomDTO.get(0).getRoomName(), roomDTO.get(0).getNickname())
                 );
                 for (RoomDTO r : roomDTO) {
                     if ((sender = onlineUser.get(r.getUserId())) != null) {
                         sender.println(customResponse.getResponse());
-                        sender.flush();
                     }
                 }
             }
-
-            customResponse = new CustomResponse<>(String.format("\"%s\"에서 나왔습니다.", roomDTO.get(1).getRoomName()));
+            customResponse = new CustomResponse<>(String.format("\"%s\"에서 나왔습니다.", roomDTO.get(0).getRoomName()));
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {

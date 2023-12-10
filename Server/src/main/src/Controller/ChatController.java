@@ -14,10 +14,10 @@ public class ChatController implements DefaultController {
     private ChatService chatService = ChatService.getInstance();
     @Override
     public CustomResponse callService(String header, String body, PrintWriter out) {
-        return switch (header) {
-            case "GET" -> chatService.loadChat(body);
-            case "POST" -> chatService.sendChat(body);
-            default -> chatService.methodError();
-        };
+        switch (header) {
+            case "GET": return chatService.loadChat(body);
+            case "POST": return chatService.sendChat(body);
+            default: return chatService.methodError();
+        }
     }
 }

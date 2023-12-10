@@ -27,7 +27,7 @@ public class ServerThread implements Runnable {
         try {
             new DefaultDAO().init();
             in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
-            out = new PrintWriter(client.getOutputStream(), false, StandardCharsets.UTF_8);
+            out = new PrintWriter(client.getOutputStream(), true, StandardCharsets.UTF_8);
             ip = client.getInetAddress();
         } catch (IOException | CustomException e) {
             System.out.println(e.getMessage());
@@ -47,9 +47,7 @@ public class ServerThread implements Runnable {
                  */
                 try {
                     response = proxyController.callService(request[0], request[1], out).getResponse();
-                    System.out.println(response);
                     out.println(response);
-                    out.flush();
                 } catch (Exception ignore) {
 
                 }

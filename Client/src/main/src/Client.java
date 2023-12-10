@@ -26,7 +26,7 @@ public class Client implements Runnable {
     private static AtomicBoolean isLoggedIn = new AtomicBoolean(false);
     static final Scanner sc = new Scanner(System.in);
 
-    public static void setLoginStatus() {
+    private static void setLoginStatus() {
         if (isLoggedIn.get()) isLoggedIn.set(false);
         else isLoggedIn.set(true);
     }
@@ -43,7 +43,6 @@ public class Client implements Runnable {
         while (true) {
             try {
                 if((msg = in.readLine()) == null) continue;
-                System.out.println(msg);
             } catch (IOException e) {
                 break;
             }
@@ -64,7 +63,7 @@ public class Client implements Runnable {
                         System.out.println(body.split(":")[1]);
                     }
                 } else if (func.equals("0")) { // 종료
-                    break;
+
                 }
 
             } else { // 로그인 상태
@@ -157,7 +156,7 @@ public class Client implements Runnable {
                     continue;
                 }
             } else {                    // 로그인 상태
-                System.out.println("기능을 선택하십시오.");
+                System.out.println("기능을 선택하십시오. 9 - 기능 목록");
                 func = sc.nextLine();
 
                 if (func.equals("1")) { // 채팅방 목록 보기 -> userId

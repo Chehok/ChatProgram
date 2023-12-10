@@ -16,7 +16,6 @@ public class CustomRequest<T> {
 
     public String getRequest() {
         String request = String.format("%s %s\t", method, path);
-        T body = getResult();
         if (body instanceof String) {
             request += String.format("%s", body);
         } else if (body instanceof List) {
@@ -32,6 +31,4 @@ public class CustomRequest<T> {
 
         return request;
     }
-
-    public T getResult() { return body; }
 }

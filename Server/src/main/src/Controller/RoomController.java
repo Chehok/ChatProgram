@@ -19,12 +19,12 @@ public class RoomController implements DefaultController {
 
     @Override
     public CustomResponse callService(String header, String body, PrintWriter out) {
-        return switch (header) {
-            case "GET" -> roomService.loadRoom(body);
-            case "POST" -> roomService.createRoom(body);
-            case "PATCH" -> roomService.inviteRoom(body);
-            case "DELETE" -> roomService.exitRoom(body);
-            default -> roomService.methodError();
-        };
+        switch (header) {
+            case "GET": return roomService.loadRoom(body);
+            case "POST": return roomService.createRoom(body);
+            case "PATCH": return roomService.inviteRoom(body);
+            case "DELETE": return roomService.exitRoom(body);
+            default: return roomService.methodError();
+        }
     }
 }
