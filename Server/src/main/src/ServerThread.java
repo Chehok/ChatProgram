@@ -1,7 +1,6 @@
 package main.src;
 
 import main.config.CustomException;
-import main.src.Controller.DefaultController;
 import main.src.Controller.ProxyController;
 import main.src.DAO.DefaultDAO;
 
@@ -16,10 +15,8 @@ import java.nio.charset.StandardCharsets;
 public class ServerThread implements Runnable {
     Socket client;//Socket 클래스 타입의 변수 child 선언
     BufferedReader in; // BufferReader 클래스 타입의 변수 ois 선언
-    public static PrintWriter out; // PrintWriter 클래스 타입의 변수 oos 선언
+    public PrintWriter out; // PrintWriter 클래스 타입의 변수 oos 선언
     InetAddress ip; // InetAddress 클래스 타입의 변수 ip 선언
-    DefaultController controller;
-
     ProxyController proxyController;
 
     public ServerThread(Socket socket) {
@@ -40,8 +37,6 @@ public class ServerThread implements Runnable {
     public void run() {
         String msg;
         String[] request;
-        String code;
-        String fromID = null;
         try {
             while ((msg = in.readLine()) != null) { // BufferedReader 에 값이 들어올 때 까지 대기함.
                 request = msg.split("\t");
@@ -49,7 +44,7 @@ public class ServerThread implements Runnable {
                  * request[0] (header) == POST /user
                  * request[1] (body) == username:username1,password:password1,nickname:nickname1
                  */
-                proxyController.callService(request[0], request[1]);
+                proxyController.callService(request[0], request[1], out);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

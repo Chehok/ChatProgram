@@ -1,14 +1,15 @@
 package main.src.Service;
 
-import main.src.DAO.UserDAO;
-import main.src.Domain.User.User;
-import main.src.Domain.User.UserDTO;
 import main.config.CustomException;
 import main.config.CustomResponse;
 import main.config.ResponseStatus;
+import main.src.DAO.UserDAO;
+import main.src.Domain.User.User;
+import main.src.Domain.User.UserDTO;
+
+import java.io.PrintWriter;
 
 import static main.src.MainServer.onlineUser;
-import static main.src.ServerThread.out;
 
 public class UserService {
     private static UserService instance = new UserService();
@@ -18,7 +19,7 @@ public class UserService {
     }
     UserDAO userDao = UserDAO.getInstance();
 
-    public void signUp(String body) {
+    public void signUp(String body, PrintWriter out) {
         CustomResponse customResponse = null;
         try {
             userDao.signUp(new User(body));
@@ -31,7 +32,7 @@ public class UserService {
         }
     }
 
-    public void login(String body) {
+    public void login(String body, PrintWriter out) {
         CustomResponse customResponse = null;
         UserDTO userDto;
         try {
@@ -49,7 +50,7 @@ public class UserService {
         }
     }
 
-    public void logout(String body) {
+    public void logout(String body, PrintWriter out) {
         CustomResponse customResponse;
         Long userId = new User(body).getUserId();
         onlineUser.remove(userId);
@@ -63,7 +64,7 @@ public class UserService {
         out.flush();
     }
 
-    public void methodError() {
+    public void methodError(PrintWriter out) {
         out.println(new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR)));
         out.flush();
     }

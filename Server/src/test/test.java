@@ -1,7 +1,6 @@
 package test;
 
 import main.config.CustomException;
-import main.src.Controller.ProxyController;
 
 public class test {
     public static void main(String[] args) throws CustomException {
@@ -20,6 +19,6 @@ public class test {
 //                "password:testPassword," +
 //                "nickname:testNickname");
 
-        new ProxyController().callService("GET /user", "username:l000127,password:dlgusdn!00");
+//        new ProxyController().callService("GET /user", "username:l000127,password:dlgusdn!00");
     }
 }

@@ -34,7 +34,6 @@ public class CustomResponse<T> {
      */
     public String getResponse() {
         String response = String.format("%s %s\t", statusCode, isSuccess);
-//        T results = getResult();
         if (result instanceof String) {
             response += String.format("message:%s", result);
         } else if (result instanceof List) {
@@ -48,9 +47,5 @@ public class CustomResponse<T> {
             response += String.format("%s", ((Result) result).getResult());
         }
         return response;
-    }
-
-    public T getResult() {
-        return result;
     }
 }

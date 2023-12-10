@@ -3,6 +3,7 @@ package main.src;
 import main.config.CustomRequest;
 import main.src.Domain.Chat.sendMessage;
 import main.src.Domain.Room.CreateRoom;
+import main.src.Domain.Room.ModifyRoom;
 import main.src.Domain.User.LoginDto;
 import main.src.Domain.User.SignUpDto;
 
@@ -25,7 +26,7 @@ public class Client implements Runnable {
     private static AtomicBoolean isLoggedIn = new AtomicBoolean(false);
     static final Scanner sc = new Scanner(System.in);
 
-    public void setLoginStatus() {
+    public static void setLoginStatus() {
         if (isLoggedIn.get()) isLoggedIn.set(false);
         else isLoggedIn.set(true);
     }
@@ -48,7 +49,7 @@ public class Client implements Runnable {
             header = msg.split("\t")[0];
             body = msg.split("\t")[1];
 
-            if (!isLoggedIn.get()) { // 비로그인
+            if (!isLoggedIn.get()) { // 비로그인 상태
                 if (func.equals("1")) {  // 회원가입
                     System.out.println(body.split(":")[1]);
                 } else if (func.equals("2")) { // 로그인
@@ -56,6 +57,7 @@ public class Client implements Runnable {
                         myID = body.split(",")[0].split(":")[1];
                         System.out.println("환영합니다! " + body.split(",")[1].split(":")[1] + " 님!\n");
                         setLoginStatus();
+                        showUsage();
                     } else if (header.split(" ")[1].equals("FAIL")) {
                         System.out.println(body.split(":")[1]);
                     }
@@ -63,60 +65,28 @@ public class Client implements Runnable {
                     break;
                 }
 
-            } else {
-                if (func.equals("1")) { // 채팅방 목록 보기
-                    for(String roomInfo: body.split("/")) {
-                        System.out.println(roomInfo);
-                    }
-                } else if (func.equals("2")) { // 채팅방 생성
+            } else { // 로그인 상태
+                if (func.equals("0")) {
                     System.out.println(body.split(":")[1]);
-                } else if (func.equals("3")) { // 채팅방 채팅 내역
-                    for(String chatInfo: body.split("/")) {
-                        System.out.println(chatInfo);
+                } else {
+                    for (String info : body.split("/")) {
+                        System.out.println(info);
                     }
-                } else if (func.equals("4")) { // 채팅 보내기
-                    System.out.println(body);
-                } else if (func.equals("0")) { // 로그아웃
-                    System.out.println(body.split(":")[1]);
-                    setLoginStatus();
                 }
             }
         }
-
-//        while (isLoggedIn.get()) {
-//            try {
-//                msg = in.readLine();
-//                header = msg.split("\t")[0];
-//                body = msg.split("\t")[1];
-//            } catch (IOException e) {
-//                break;
-//            }
-//            if (header.split(" ")[1].equals("SUCCESS")) {
-////                if(body.equals(""))
-//                System.out.println("서버로부터 온 메시지: " + body);
-//            } else {
-//                System.out.println("서버로부터 온 메시지: " + body);
-//            }
-//            if (msg == null) {
-//                System.out.println("서버 연결이 종료되었습니다.");
-//                break;
-//            } else if (msg.split("\t")[0].split(" ")[1].equals("SUCCESS")) {
-//                reg_stop();
-//                System.out.println("ID 등록이 성공했습니다");
-//            } else {
-//                System.out.println("서버로부터 온 메시지: " + msg);
-//            }
-//        }
     }
 
     private static void showUsage() {
-        System.out.println("""
-                기능을 선택 하십시오.
-                1 - 채팅방 목록 보기
-                2 - 채팅방 생성
-                3 - 채팅방 채팅 내역
-                4 - 채팅 보내기
-                0 - 로그아웃"""
+        System.out.println("기능을 선택 하십시오.\n" +
+                        "1 - 채팅방 목록 보기\n" +
+                        "2 - 채팅방 생성\n" +
+                        "3 - 채팅방 초대\n" +
+                        "4 - 채팅방 나가기\n" +
+                        "5 - 채팅방 채팅 내역\n" +
+                        "6 - 채팅 보내기\n" +
+                        "9 - 기능 목록 보기\n" +
+                        "0 - 로그아웃"
         );
     }
 
@@ -148,11 +118,10 @@ public class Client implements Runnable {
                 String username;
                 String password;
                 String nickname;
-                System.out.println("""
-                        기능을 선택 하십시오.
-                        1 - 회원가입
-                        2 - 로그인
-                        0 - 종료"""
+                System.out.println("기능을 선택 하십시오.\n" +
+                                "1 - 회원가입\n" +
+                                "2 - 로그인\n" +
+                                "0 - 종료"
                 );
                 func = sc.nextLine();
 
@@ -187,7 +156,6 @@ public class Client implements Runnable {
                     continue;
                 }
             } else {                    // 로그인 상태
-                showUsage();
                 func = sc.nextLine();
 
                 if (func.equals("1")) { // 채팅방 목록 보기 -> userId
@@ -199,14 +167,30 @@ public class Client implements Runnable {
                             "POST", "/room",
                             new CreateRoom(roomName, myID)
                     );
-                } else if (func.equals("3")) { // 채팅방 채팅 내역 -> roomId
+                } else if (func.equals("3")) { // 채팅방 초대 -> roomId, userId
+                    System.out.println("초대할 채팅방을 입력하세요. ex) 1");
+                    String roomId = sc.nextLine();
+                    System.out.println("초대할 유저를 입력하세요. ex) 1");
+                    String userId = sc.nextLine();
+                    customRequest = new CustomRequest(
+                            "PATCH", "/room",
+                            new ModifyRoom(roomId, userId)
+                    );
+                } else if (func.equals("4")) { // 채팅방 나가기 -> roomId, myId
+                    System.out.println("나갈 채팅방 아이디를 입력하세요");
+                    String roomName = sc.nextLine();
+                    customRequest = new CustomRequest(
+                            "DELETE", "/room",
+                            new ModifyRoom(roomName, myID)
+                    );
+                } else if (func.equals("5")) { // 채팅방 채팅 내역 -> roomId
                     System.out.println("채팅방을 선택하세요. ex) 1");
                     String roomId = sc.nextLine();
                     customRequest = new CustomRequest(
                             "GET", "/chat",
                             "roomId:" + roomId
                     );
-                } else if (func.equals("4")) { // 채팅 보내기 -> roomId, message, userId
+                } else if (func.equals("6")) { // 채팅 보내기 -> roomId, message, userId
                     System.out.println("채팅방을 선택하세요. ex) 1");
                     String roomId = sc.nextLine();
                     System.out.println("메시지를 입력하세요.");
@@ -215,8 +199,12 @@ public class Client implements Runnable {
                             "POST", "/chat",
                             new sendMessage(roomId, message, myID)
                     );
+                } else if (func.equals("9")) { // 메뉴 보기
+                    showUsage();
+                    continue;
                 } else if (func.equals("0")) { // 로그아웃
                     customRequest = new CustomRequest("PATCH", "/user", "userId:" + myID);
+                    setLoginStatus();
                 } else {
                     System.out.println("잘못된 입력입니다.");
                     continue;
@@ -233,31 +221,5 @@ public class Client implements Runnable {
                 조건문을 검사합니다.
             */
         }
-//        showUsage();
-
-//        while (ID_reg_Flag.get()) {
-//            msg = sc.nextLine();
-//            String[] tokens = msg.split(":");
-//            String code = tokens[0];
-//            if (code.equalsIgnoreCase("Quit")) {
-//                msg = "QUIT:" + myID + ":";
-//                out.println(msg);
-//                out.flush();
-//                break;
-//            } else if ("TO".equals(code)) {
-//                String toID = tokens[1];
-//                String message = tokens[2];
-//                msg = "TO:" + myID + ":" + toID + ":" + message;
-//                out.println(msg);
-//                out.flush();
-//            } else if ("BR".equals(code)) {
-//                String message = tokens[1];
-//                msg = "BR:" + myID + ":" + message;
-//                out.println(msg);
-//                out.flush();
-//            } else {  //정해진 사용법이 아닌 것으로 입력시
-//                showUsage();
-//            }
-//        }
     }
 }
