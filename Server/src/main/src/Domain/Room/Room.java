@@ -7,7 +7,7 @@ public class Room implements Result {
     private Long userId;
     private String roomName;
 
-    // 채팅방 생성
+    // 채팅방 생성용 생성자
     public Room(String body) {
         String[] args = body.split(",");
         for (String arg : args) {
@@ -20,15 +20,15 @@ public class Room implements Result {
         }
     }
 
-    @Override
-    public String getResult() {
-        return String.format("roomId:%s,roomName:%s", roomId, roomName);
-    }
-
-    // 채팅방 조회
+    // 채팅방 조회용 생성자
     public Room(Long roomId, String roomName) {
         this.roomId = roomId;
         this.roomName = roomName;
+    }
+
+    @Override
+    public String getResult() {
+        return String.format("roomId:%s,roomName:%s", roomId, roomName);
     }
 
     public Long getRoomId() {

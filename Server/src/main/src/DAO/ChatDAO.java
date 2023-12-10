@@ -47,7 +47,7 @@ public class ChatDAO extends DefaultDAO {
             } while(resultSet.next());
 
             return list;
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {
@@ -98,7 +98,7 @@ public class ChatDAO extends DefaultDAO {
             } while (resultSet.next());
 
             return list;
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {

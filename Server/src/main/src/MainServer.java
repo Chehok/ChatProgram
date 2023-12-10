@@ -36,7 +36,6 @@ public class MainServer implements Runnable {
                 }
             }
             // server.close();
-            //System.out.println("Server terminated");
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }

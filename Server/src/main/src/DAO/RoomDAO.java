@@ -47,7 +47,7 @@ public class RoomDAO extends DefaultDAO {
             } while (resultSet.next());
 
             return list;
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class RoomDAO extends DefaultDAO {
             if (count == 0) {
                 throw new CustomException(DB_ERROR);
             }
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {
@@ -157,7 +157,7 @@ public class RoomDAO extends DefaultDAO {
             } while (resultSet.next());
 
             return list;
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {
@@ -208,7 +208,7 @@ public class RoomDAO extends DefaultDAO {
             }
 
             return list;
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {

@@ -42,7 +42,8 @@ public class Client implements Runnable {
 
         while (true) {
             try {
-                msg = in.readLine();
+                if((msg = in.readLine()) == null) continue;
+                System.out.println(msg);
             } catch (IOException e) {
                 break;
             }
@@ -57,6 +58,7 @@ public class Client implements Runnable {
                         myID = body.split(",")[0].split(":")[1];
                         System.out.println("환영합니다! " + body.split(",")[1].split(":")[1] + " 님!\n");
                         setLoginStatus();
+                        System.out.println("기능을 선택하십시오.");
                         showUsage();
                     } else if (header.split(" ")[1].equals("FAIL")) {
                         System.out.println(body.split(":")[1]);
@@ -78,8 +80,7 @@ public class Client implements Runnable {
     }
 
     private static void showUsage() {
-        System.out.println("기능을 선택 하십시오.\n" +
-                        "1 - 채팅방 목록 보기\n" +
+        System.out.println("1 - 채팅방 목록 보기\n" +
                         "2 - 채팅방 생성\n" +
                         "3 - 채팅방 초대\n" +
                         "4 - 채팅방 나가기\n" +
@@ -156,6 +157,7 @@ public class Client implements Runnable {
                     continue;
                 }
             } else {                    // 로그인 상태
+                System.out.println("기능을 선택하십시오.");
                 func = sc.nextLine();
 
                 if (func.equals("1")) { // 채팅방 목록 보기 -> userId
@@ -211,10 +213,10 @@ public class Client implements Runnable {
                 }
             }
             msg = customRequest.getRequest();
-            System.out.println(msg);
             out.println(msg);
             out.flush();
-            System.out.println("전송");
+//            System.out.println(msg);
+//            System.out.println("전송");
             Thread.sleep(500);
             /* 컴퓨터 성능에 따라 서버로부터 답이 늦게 오면 키보드 입력문으로 바로
                 실행이 넘어갈 수 있어서 서버로부터 답을 기다리기 위해 잠시 기다린 후

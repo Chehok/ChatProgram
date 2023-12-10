@@ -1,5 +1,6 @@
 package main.src.Controller;
 
+import main.config.CustomResponse;
 import main.src.Service.RoomService;
 
 import java.io.PrintWriter;
@@ -17,23 +18,13 @@ public class RoomController implements DefaultController {
     RoomService roomService = RoomService.getInstance();
 
     @Override
-    public void callService(String header, String body, PrintWriter out) {
-        switch (header) {
-            case "GET":
-                roomService.loadRoom(body, out);
-                break;
-            case "POST":
-                roomService.createRoom(body, out);
-                break;
-            case "PATCH":
-                roomService.inviteRoom(body, out);
-                break;
-            case "DELETE":
-                roomService.exitRoom(body, out);
-                break;
-            default:
-                roomService.methodError(out);
-                break;
-        }
+    public CustomResponse callService(String header, String body, PrintWriter out) {
+        return switch (header) {
+            case "GET" -> roomService.loadRoom(body);
+            case "POST" -> roomService.createRoom(body);
+            case "PATCH" -> roomService.inviteRoom(body);
+            case "DELETE" -> roomService.exitRoom(body);
+            default -> roomService.methodError();
+        };
     }
 }

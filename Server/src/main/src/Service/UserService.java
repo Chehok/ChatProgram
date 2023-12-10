@@ -19,7 +19,7 @@ public class UserService {
     }
     UserDAO userDao = UserDAO.getInstance();
 
-    public void signUp(String body, PrintWriter out) {
+    public CustomResponse signUp(String body) {
         CustomResponse customResponse = null;
         try {
             userDao.signUp(new User(body));
@@ -27,12 +27,11 @@ public class UserService {
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(customResponse.getResponse());
-            out.flush();
+            return customResponse;
         }
     }
 
-    public void login(String body, PrintWriter out) {
+    public CustomResponse login(String body, PrintWriter out) {
         CustomResponse customResponse = null;
         UserDTO userDto;
         try {
@@ -45,12 +44,11 @@ public class UserService {
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(customResponse.getResponse());
-            out.flush();
+            return customResponse;
         }
     }
 
-    public void logout(String body, PrintWriter out) {
+    public CustomResponse logout(String body) {
         CustomResponse customResponse;
         Long userId = new User(body).getUserId();
         onlineUser.remove(userId);
@@ -60,12 +58,11 @@ public class UserService {
         } else {
             customResponse = new CustomResponse("로그아웃 되었습니다!");
         }
-        out.println(customResponse.getResponse());
-        out.flush();
+
+        return customResponse;
     }
 
-    public void methodError(PrintWriter out) {
-        out.println(new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR)));
-        out.flush();
+    public CustomResponse methodError() {
+        return new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR));
     }
 }

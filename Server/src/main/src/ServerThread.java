@@ -37,6 +37,7 @@ public class ServerThread implements Runnable {
     public void run() {
         String msg;
         String[] request;
+        String response;
         try {
             while ((msg = in.readLine()) != null) { // BufferedReader 에 값이 들어올 때 까지 대기함.
                 request = msg.split("\t");
@@ -44,7 +45,15 @@ public class ServerThread implements Runnable {
                  * request[0] (header) == POST /user
                  * request[1] (body) == username:username1,password:password1,nickname:nickname1
                  */
-                proxyController.callService(request[0], request[1], out);
+                try {
+                    response = proxyController.callService(request[0], request[1], out).getResponse();
+                    System.out.println(response);
+                    out.println(response);
+                    out.flush();
+                } catch (Exception ignore) {
+
+                }
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

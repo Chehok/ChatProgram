@@ -45,7 +45,7 @@ public class UserDAO extends DefaultDAO {
             if (count == 0) {
                 throw new CustomException(DB_ERROR);
             }
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } catch (CustomException e){
             throw e;
@@ -75,7 +75,7 @@ public class UserDAO extends DefaultDAO {
             }
 
             return new UserDTO(resultSet.getLong(1), resultSet.getString(2));
-        } catch (SQLException e) { // MySQL 에러
+        } catch (SQLException e) {
             throw new CustomException(DB_ERROR);
         } finally {
             try {

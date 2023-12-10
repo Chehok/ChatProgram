@@ -25,7 +25,7 @@ public class RoomService {
 
     RoomDAO roomDao = RoomDAO.getInstance();
 
-    public void loadRoom(String body, PrintWriter out) {
+    public CustomResponse loadRoom(String body) {
         CustomResponse customResponse = null;
         Room room = new Room(body);
 
@@ -37,12 +37,11 @@ public class RoomService {
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(customResponse.getResponse());
-            out.flush();
+            return customResponse;
         }
     }
 
-    public void createRoom(String body, PrintWriter out) {
+    public CustomResponse createRoom(String body) {
         CustomResponse customResponse = null;
         Room room = new Room(body);
         try {
@@ -54,12 +53,11 @@ public class RoomService {
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(customResponse.getResponse());
-            out.flush();
+            return customResponse;
         }
     }
 
-    public void inviteRoom(String body, PrintWriter out) {
+    public CustomResponse inviteRoom(String body) {
         List<RoomDTO> roomDTO;
         CustomResponse customResponse = null;
         PrintWriter sender;
@@ -77,10 +75,7 @@ public class RoomService {
                         String.format("\"%s\"에 \"%s\"님이 들어오셨습니다", roomDTO.get(1).getRoomName(), roomDTO.get(1).getNickname())
                 );
                 for (RoomDTO r : roomDTO) {
-                    if ((sender = onlineUser.get(r.getUserId())) != null) { // 온라인이 아닌데도 sender 에 값이 들어가는 오류?
-//                        customResponse = new CustomResponse<>(
-//                                String.format("\"%s\"에 \"%s\"님이 들어오셨습니다", r.getRoomName(), r.getNickname())
-//                        );
+                    if ((sender = onlineUser.get(r.getUserId())) != null) {
                         sender.println(customResponse.getResponse());
                         sender.flush();
                     }
@@ -91,12 +86,11 @@ public class RoomService {
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(customResponse.getResponse());
-            out.flush();
+            return customResponse;
         }
     }
 
-    public void exitRoom(String body, PrintWriter out) {
+    public CustomResponse exitRoom(String body) {
         List<RoomDTO> roomDTO;
         CustomResponse customResponse = null;
         PrintWriter sender;
@@ -115,9 +109,6 @@ public class RoomService {
                 );
                 for (RoomDTO r : roomDTO) {
                     if ((sender = onlineUser.get(r.getUserId())) != null) {
-//                        customResponse = new CustomResponse<>(
-//                                String.format("\"%s\"에서 \"%s\"님이 나가셨습니다", r.getRoomName(), r.getNickname())
-//                        );
                         sender.println(customResponse.getResponse());
                         sender.flush();
                     }
@@ -128,13 +119,11 @@ public class RoomService {
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
-            out.println(customResponse.getResponse());
-            out.flush();
+            return customResponse;
         }
     }
 
-    public void methodError(PrintWriter out) {
-        out.println(new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR)));
-        out.flush();
+    public CustomResponse methodError() {
+        return new CustomResponse<>(new CustomException(ResponseStatus.METHOD_ERROR));
     }
 }
