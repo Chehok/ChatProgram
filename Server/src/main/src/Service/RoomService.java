@@ -72,7 +72,7 @@ public class RoomService {
 
             synchronized (onlineUser) {
                 customResponse = new CustomResponse<>(
-                        String.format("\"%s\"에 \"%s\"님이 들어오셨습니다", roomDTO.get(0).getRoomName(), roomDTO.get(0).getNickname())
+                        String.format("\"%s\"에 \"%s\"님이 초대 되었습니다", roomDTO.get(0).getRoomName(), roomDTO.get(0).getNickname())
                 );
                 for (RoomDTO r : roomDTO) {
                     if ((sender = onlineUser.get(r.getUserId())) != null) {
@@ -81,7 +81,7 @@ public class RoomService {
                 }
             }
 
-            customResponse = new CustomResponse<>("초대 성공");
+            return null;
         } catch (CustomException e) {
             customResponse = new CustomResponse<>(e.getStatus());
         } finally {
