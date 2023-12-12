@@ -2,9 +2,6 @@ package main.src;
 
 import java.util.Scanner;
 
-// test.test
-
-
 public class Main {
     public static void main(String[] args)
     {
