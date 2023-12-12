@@ -40,4 +40,4 @@ out/
 .DS_Store
 
 ### config ###
-Server/src/main/config/Constant.java
+#Server/src/main/config/Constant.java
