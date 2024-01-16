@@ -2,7 +2,7 @@
 채팅 프로토콜 설계 및 소켓을 활용한 실시간 채팅 프로그램 작성
 
 ## 🖥️ 프로젝트 소개
-> **순수 Java로 SpringBoot 의 구조 및 작동 방식을 모방하여 직접 구현한 프로젝트입니다.**
+> **Java로 SpringBoot 의 구조 및 작동 방식을 모방한 프로젝트입니다.**
 - Singleton 패턴과 DI 를 구현하여 빈 컨테이너를 모방하였습니다.
 - DI 는 Proxy 패턴으로 구현하였습니다.
 - 패키지를 책임에 따라 Config / Controller / Service / DAO / Domain 으로 구성했습니다.
